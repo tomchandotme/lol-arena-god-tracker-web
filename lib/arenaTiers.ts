@@ -1,5 +1,13 @@
 export const OPGG_ARENA_CHAMPIONS = "https://lol-api-champion.op.gg/api/global/champions/arena";
 
+export function opggArenaBuildUrl(alias: string | null | undefined) {
+	const slug = String(alias || "")
+		.trim()
+		.toLowerCase();
+	if (!slug) return "";
+	return `https://op.gg/lol/modes/arena/${encodeURIComponent(slug)}/build`;
+}
+
 export const ARENA_TIER_LETTERS = ["S", "A", "B", "C", "D"] as const;
 export type ArenaTierLetter = (typeof ARENA_TIER_LETTERS)[number];
 

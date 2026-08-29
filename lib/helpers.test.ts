@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { formatLastPlay, formatPoints, searchPlaceholder } from "./format";
+import { formatLastPlay, formatPoints, searchPlaceholder, splitChampionName } from "./format";
 import { championSquareUrl, mapChampionCatalog } from "./riot";
 import {
 	championStampLabel,
@@ -7,6 +7,7 @@ import {
 	groupChampionsByArenaTier,
 	letterFromOpggTier,
 	mapOpggArenaTiers,
+	opggArenaBuildUrl,
 } from "./arenaTiers";
 
 describe("riot helpers", () => {
@@ -38,6 +39,13 @@ describe("riot helpers", () => {
 });
 
 describe("display format", () => {
+	test("splitChampionName breaks before the last word", () => {
+		expect(splitChampionName("Renata Glasc")).toEqual({ lead: "Renata", rest: "Glasc" });
+		expect(splitChampionName("Nunu & Willump")).toEqual({ lead: "Nunu &", rest: "Willump" });
+		expect(splitChampionName("Dr. Mundo")).toEqual({ lead: "Dr.", rest: "Mundo" });
+		expect(splitChampionName("Nami")).toEqual({ lead: "Nami", rest: "" });
+	});
+
 	test("formatPoints shortens large totals", () => {
 		expect(formatPoints(999)).toBe("999");
 		expect(formatPoints(1500)).toBe("1.5k");
@@ -91,6 +99,14 @@ describe("searchPlaceholder", () => {
 });
 
 describe("op.gg arena tiers", () => {
+	test("arena build url uses lowercase ddragon alias", () => {
+		expect(opggArenaBuildUrl("Nami")).toBe("https://op.gg/lol/modes/arena/nami/build");
+		expect(opggArenaBuildUrl("MonkeyKing")).toBe(
+			"https://op.gg/lol/modes/arena/monkeyking/build",
+		);
+		expect(opggArenaBuildUrl("")).toBe("");
+	});
+
 	test("maps numeric tiers to letters and skips rip rows", () => {
 		expect(letterFromOpggTier(1)).toBe("S");
 		expect(letterFromOpggTier(3)).toBe("B");

@@ -12,6 +12,13 @@ function shortest<T extends ChampNames>(rows: T[], key: (row: T) => string) {
 	});
 }
 
+export function splitChampionName(name: string) {
+	const trimmed = String(name || "").trim();
+	const i = trimmed.lastIndexOf(" ");
+	if (i <= 0) return { lead: trimmed, rest: "" };
+	return { lead: trimmed.slice(0, i), rest: trimmed.slice(i + 1) };
+}
+
 export function searchPlaceholder(champions: ChampNames[]) {
 	if (champions.length === 0) return "English, 中文, or alias";
 	const en = shortest(champions, (c) => c.nameEn);

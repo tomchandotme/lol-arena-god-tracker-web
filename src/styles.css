@@ -210,7 +210,8 @@ body {
 .filters button:focus-visible,
 .search:focus-visible,
 .sort select:focus-visible,
-.champ:focus-visible {
+.champ-hit:focus-visible,
+.champ-opgg:focus-visible {
 	outline: 2px solid var(--brass);
 	outline-offset: 2px;
 }
@@ -339,17 +340,61 @@ body {
 }
 
 .champ {
+	position: relative;
 	display: grid;
-	grid-template-columns: 56px minmax(0, 1fr) auto;
-	column-gap: 0.7rem;
 	width: 100%;
 	align-items: start;
-	text-align: left;
-	cursor: pointer;
 	border: 1px solid var(--dust);
 	background: var(--pit-lift);
 	padding: 0.55rem 0.65rem;
 	color: inherit;
+}
+
+.champ-hit {
+	display: grid;
+	grid-template-columns: 56px minmax(0, 1fr);
+	column-gap: 0.7rem;
+	width: 100%;
+	min-width: 0;
+	align-items: start;
+	text-align: left;
+	cursor: pointer;
+	border: 0;
+	background: transparent;
+	padding: 0 2.6rem 0 0;
+	color: inherit;
+	font: inherit;
+}
+
+.champ.won .champ-hit {
+	padding-right: 3.2rem;
+}
+
+.champ-aside {
+	position: absolute;
+	top: 0.5rem;
+	right: 0.55rem;
+	z-index: 2;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+	gap: 0.35rem;
+	pointer-events: none;
+}
+
+.champ-opgg {
+	color: var(--mute);
+	font-size: 0.62rem;
+	font-weight: 600;
+	letter-spacing: 0.1em;
+	line-height: 1;
+	text-transform: uppercase;
+	text-decoration: none;
+	pointer-events: auto;
+}
+
+.champ-opgg:hover {
+	color: var(--brass);
 }
 
 .champ.won {
@@ -384,20 +429,27 @@ body {
 }
 
 .champ-name {
-	display: block;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+	overflow: hidden;
 	font-size: 1.05rem;
 	font-weight: 600;
-	letter-spacing: -0.01em;
-	line-height: 1.15;
+	letter-spacing: -0.03em;
+	line-height: 1.08;
+	overflow-wrap: break-word;
 }
 
 .champ-zh {
 	display: block;
 	margin-top: 0.12rem;
+	overflow: hidden;
 	color: var(--ash);
 	font-size: 0.82rem;
 	font-weight: 500;
 	letter-spacing: 0.2rem;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 .champ-meta {

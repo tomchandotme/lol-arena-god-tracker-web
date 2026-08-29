@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
-import { groupChampionsByArenaTier } from "../lib/arenaTiers";
-import { formatLastPlay, formatPoints, searchPlaceholder } from "../lib/format";
+import { groupChampionsByArenaTier, opggArenaBuildUrl } from "../lib/arenaTiers";
+import { formatLastPlay, formatPoints, searchPlaceholder, splitChampionName } from "../lib/format";
 import type { TrackerChampion } from "../lib/tracker";
 
 export default function ChampionBoard({
@@ -183,27 +183,47 @@ function ChampionTile({
 }) {
 	const last = formatLastPlay(c.lastPlay, now);
 	const meta = [formatPoints(c.masteryPoints), last.label].filter(Boolean).join(" · ");
+	const opggUrl = opggArenaBuildUrl(c.alias);
+	const { lead, rest } = splitChampionName(c.nameEn);
 	return (
-		<li>
-			<button
-				type="button"
-				onClick={() => onToggle(c)}
-				className={`champ${c.hasFirst ? " won" : ""}`}
-			>
+		<li className={`champ${c.hasFirst ? " won" : ""}`}>
+			<button type="button" onClick={() => onToggle(c)} className="champ-hit">
 				{c.imageUrl ? (
 					<img src={c.imageUrl} alt="" width={56} height={56} />
 				) : (
 					<span className="champ-art-gap" aria-hidden="true" />
 				)}
 				<span className="champ-copy">
-					<span className="champ-name">{c.nameEn}</span>
-					<span className="champ-zh">{c.nameZh}</span>
+					<span className="champ-name" title={c.nameEn}>
+						{lead}
+						{rest ? (
+							<>
+								<wbr /> {rest}
+							</>
+						) : null}
+					</span>
+					<span className="champ-zh" title={c.nameZh}>
+						{c.nameZh}
+					</span>
 					<span className="champ-meta" title={last.title}>
 						{meta}
 					</span>
 				</span>
-				{c.hasFirst ? <span className="stamp">1ST</span> : null}
 			</button>
+			<span className="champ-aside">
+				{c.hasFirst ? <span className="stamp">1ST</span> : null}
+				{opggUrl ? (
+					<a
+						className="champ-opgg"
+						href={opggUrl}
+						target="_blank"
+						rel="noopener noreferrer"
+						aria-label={`${c.nameEn} Arena build on OP.GG`}
+					>
+						op.gg
+					</a>
+				) : null}
+			</span>
 		</li>
 	);
 }
