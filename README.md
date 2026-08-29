@@ -27,5 +27,6 @@ If you still have an old `data/tracker.sqlite`, `bun run export-json` writes a f
 - Build command: `bun run build`
 - Output directory: `dist`
 - Install command: `bun install`
+- Build environment variable: `BUN_VERSION=1.4.0` (Pages defaults to 1.2.15, which cannot read this repo's `bun.lock`)
 
 The on-disk backup format id is still `arena-god-tracker-backup`, so older JSON exports keep working.
