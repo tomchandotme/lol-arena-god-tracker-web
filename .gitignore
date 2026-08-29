@@ -1,0 +1,10 @@
+node_modules
+dist
+.vite
+.next
+.env
+.env.*
+.DS_Store
+data/*.sqlite
+data/*.sqlite-*
+data/*.json
